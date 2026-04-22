@@ -2,7 +2,40 @@
 
 ## Overview
 
-This project implements a reproducible batch data processing pipeline with logging, metrics tracking, and Docker support.
+This project implements a minimal MLOps-style batch processing pipeline designed for reproducibility, observability, and deployment readiness.
+
+The pipeline processes OHLCV data to generate a simple trading signal based on rolling mean comparison.
+
+---
+
+## Features
+
+* Config-driven execution using YAML
+* Deterministic results using random seed
+* Robust data validation and error handling
+* Rolling mean computation on `close` price
+* Binary signal generation
+* Structured metrics output(JSON)
+* Detailed logging for observability
+* Docker-ready deployment
+
+---
+
+## Project Structure
+
+```
+mlops-task/
+├── run.py
+├── config.yaml
+├── data.csv
+├── requirements.txt
+├── Dockerfile
+├── metrics.json
+├── run.log
+└── README.md
+```
+
+---
 
 ## Local Execution
 
@@ -11,6 +44,8 @@ pip install -r requirements.txt
 python run.py --input data.csv --config config.yaml --output metrics.json --log-file run.log
 ```
 
+---
+
 ## Docker Execution
 
 ```bash
@@ -18,21 +53,13 @@ docker build -t mlops-task .
 docker run --rm mlops-task
 ```
 
-## Problem on Docker Execution
+---
 
-Due to local system-level permission constraints, Docker Desktop could not be fully configured on machine.
+## Docker Execution Problem
 
-However, the Dockerfile is implemented following standard practices and has been verified logically. The container should build and run successfully in any standard Docker-enabled environment.
+Due to system-level permission constraints, Docker Desktop could not be executed locally. However, the Dockerfile follows standard practices and should run correctly in any Docker-enabled environment.
 
-## Features
-
-* Config-driven pipeline(YAML)
-* Deterministic execution using seed
-* Rolling mean computation
-* Binary signal generation
-* Structured metrics output(JSON)
-* Detailed logging for observability
-* Docker-ready deployment
+---
 
 ## Example Output
 
@@ -47,3 +74,22 @@ However, the Dockerfile is implemented following standard practices and has been
   "status": "success"
 }
 ```
+
+---
+
+## Design Decisions
+
+* Rolling mean uses window from config for flexibility
+* Initial NaN rows are dropped to maintain signal consistency
+* Logging added at each stage for observability
+* Metrics written even in failure cases for reliability
+
+---
+
+## How This Reflects MLOps Principles
+
+* **Reproducibility** → config + seed
+* **Observability** → logs + structured metrics
+* **Deployment Ready** → Dockerized execution
+
+
